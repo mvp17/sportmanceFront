@@ -45,11 +45,6 @@ a {
 	text-decoration: none;
 }
 
-h3 {
-	color: var(--color-theme-1);
-	text-decoration: none;
-}
-
 a:hover {
 	text-decoration: underline;
 }

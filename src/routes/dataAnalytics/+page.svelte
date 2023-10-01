@@ -1,4 +1,9 @@
+<svelte:head>
+	<title>Data Analytics</title>
+</svelte:head>
+
 <script>
+  import { Button, Checkbox, Card } from 'flowbite-svelte';
     let messages = [];
     let dictCSVFiles = [];
     let perfVarsList = ["var1", "var2"];
@@ -118,18 +123,15 @@
   </div>
   {:else}
   <div class="text-column">
-    <h1>Data analytics</h1>
-    <div>
+    <Card>
       {#each perfVarsList as perfVar}
-        <input type="checkbox" class="checks" value={perfVar}> {perfVar}
+        <Checkbox class="checks" value={perfVar}> {perfVar} </Checkbox>
       {/each}
-      <button class="btn btn-primary" on:click={getSelectorChecks}>Save</button>
-    </div>
-    <div>
-      <button class="btn btn-success example" on:click={() => exportTableToCSV("table.csv")}>
+      <Button on:click={getSelectorChecks}>Save</Button>
+      <Button color="green" on:click={() => exportTableToCSV("table.csv")}>
         Export HTML table to CSV file
-      </button>
+      </Button>
+    </Card>
     </div>
-  </div>
   {/if}
   
