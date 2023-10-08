@@ -142,31 +142,3 @@
 		color: var(--color-theme-1);
 	}
 </style>
-
-<!--
-<Navbar let:hidden let:toggle fluid={false} rounded={true}>
-	<NavHamburger on:click={toggle} />
-	<NavUl {activeUrl} {hidden}>
-		<NavLi href="/">Home</NavLi>
-		<NavLi class="cursor-pointer">
-      Profile<ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
-    </NavLi>
-    <Dropdown class="w-44 z-20">
-      <DropdownItem href="/signup">Sign Up</DropdownItem>
-      <DropdownItem href="/signin">Sign In</DropdownItem>
-      <DropdownItem href="/account">Account</DropdownItem>
-      <DropdownDivider />
-      <DropdownItem href="/signout">Sign out</DropdownItem>
-    </Dropdown>
-		<NavLi class="cursor-pointer">
-      Data<ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
-    </NavLi>
-    <Dropdown class="w-44 z-20">
-      <DropdownItem href="/dataInput">Input</DropdownItem>
-      <DropdownItem href="/dataAnalytics">Analytics</DropdownItem>
-    </Dropdown>
-		<NavLi href="/settings">Settings</NavLi>
-		<NavLi href="/dashboard">Dashboard</NavLi>
-	</NavUl>
-</Navbar>
--->
