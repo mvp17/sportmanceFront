@@ -4,14 +4,14 @@
 
 <script>
 	import { Button, Card, Label, Input } from 'flowbite-svelte';
-	import axios from 'axios'
+	import axios from 'axios';
 	
 	let /** @type {string} */username, /** @type {string} */ email, /** @type {string} */ password;
 	const baseURL = 'http://localhost:8000/api/'
 	
 	async function signup () {
 		try {
-			const res = await axios.post(baseURL + 'register', { name: username, email: email, password: password });
+			const res = await axios.post(baseURL + '/register', { name: username, email: email, password: password });
 			console.log(res.data)
 		} catch (err) {
 			console.log(err);

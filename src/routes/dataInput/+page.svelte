@@ -3,8 +3,24 @@
 </svelte:head>
 
 <script>
+    import axios from 'axios';
 	import { Button, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-	let files = [];
+    import { onMount } from 'svelte';
+    import { baseURL } from '../../environment';
+	
+	let /** @type {{ title: string, athlete: string, csv: string, game: string, maxPlayers: number }[] } */ files = [];
+
+	onMount(async () => {
+        try {
+			axios.defaults.withCredentials = true;
+			const instance = axios.create({ baseURL: baseURL });
+			const res = await instance.get('/get-all-files');
+			console.log(res.data)
+			files = res.data
+		} catch (err) {
+			console.log(err);
+		}
+    });
 </script>
 
 <div class="container" style="margin-top: 30px">
