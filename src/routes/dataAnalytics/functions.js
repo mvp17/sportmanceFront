@@ -1,20 +1,21 @@
-export function getSelectorChecks() {
+export function getSelectorChecks(/** @type { string[][][] } */ dictCSVFiles) {
 	let checks = document.getElementsByClassName('checks');
-	let str = [];
+	let /** @type { string[] } */ str = [];
 
 	for (let i = 0; i < checks.length; i++) {
+		// @ts-ignore
 		if (checks[i].checked === true) {
+			// @ts-ignore
 			str.push(checks[i].value);
 		}
 	}
-	processChecksWithDataToDisplay(str);
+	processChecksWithDataToDisplay(str, dictCSVFiles);
 }
 
-function processChecksWithDataToDisplay(str, dictCSVFiles) {
-	let list_json = { dictCSVFiles };
-	let keys = [];
-	let values = [];
-	//list_json = {dictCSVFiles};
+function processChecksWithDataToDisplay(/** @type { string[] } */ str, /** @type { string[][][] } */ dictCSVFiles) {
+	let list_json = dictCSVFiles;
+	let /** @type { string[] } */ keys = [];
+	let /** @type { string[][] } */ values = [];
 
 	for (let dict = 0; dict < list_json.length; dict++) {
 		for (let key in list_json[dict]) {
@@ -29,7 +30,7 @@ function processChecksWithDataToDisplay(str, dictCSVFiles) {
 	generateDataTable(keys, values);
 }
 
-function generateDataTable(columnNames, columnValues) {
+function generateDataTable(/** @type { string[] } */ columnNames, /** @type { string[][] } */ columnValues) {
 	let body = document.body,
 		tbl = document.createElement('table');
 	let subListLength = 0;
@@ -59,14 +60,15 @@ function generateDataTable(columnNames, columnValues) {
 	body.appendChild(tbl);
 }
 
-function exportTableToCSV(filename) {
-	let csv = [];
+export function exportTableToCSV(/** @type { string } */ filename) {
+	let /** @type { string[] } */ csv = [];
 	let rows = document.querySelectorAll('table tr');
 
 	for (let i = 0; i < rows.length; i++) {
 		let row = [],
 			cols = rows[i].querySelectorAll('td, th');
 
+		// @ts-ignore
 		for (let j = 0; j < cols.length; j++) row.push(cols[j].innerText);
 
 		csv.push(row.join(';'));
@@ -75,7 +77,7 @@ function exportTableToCSV(filename) {
 	downloadCSV(csv.join('\n'), filename);
 }
 
-function downloadCSV(csv, filename) {
+function downloadCSV(/** @type { string } */ csv, /** @type { string } */ filename) {
 	let csvFile;
 	let downloadLink;
 

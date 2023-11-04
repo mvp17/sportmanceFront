@@ -6,6 +6,7 @@
 	import { Card, Input, Label, Button, Select } from 'flowbite-svelte';
 	import axios from 'axios';
 	import { baseURL } from '../../environment';
+    import { jwt } from '../../stores/sessionStore';
 
 	let initTimeBack = 0;
 	let finTimeBack = 1;

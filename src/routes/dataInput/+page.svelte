@@ -8,7 +8,7 @@
     import { onMount } from 'svelte';
     import { baseURL } from '../../environment';
 	
-	let /** @type {{ title: string, athlete: string, csv: string, game: string, maxPlayers: number }[] } */ files = [];
+	let /** @type {{ id: number, title: string, athlete: string, csv: string }[] } */ files = [];
 
 	onMount(async () => {
         try {
@@ -21,6 +21,19 @@
 			console.log(err);
 		}
     });
+
+	async function handleSubmit (/** @type {number} */ id) {
+		try {
+			axios.defaults.withCredentials = true;
+			const instance = axios.create({ baseURL: baseURL });
+			let res = await instance.post(`/delete-data-input/${id}`);
+			console.log(res.data)
+			res = await instance.get('/get-all-files');
+			files = res.data
+		} catch (err) {
+			console.log(err);
+		}
+	}
 </script>
 
 <div class="container" style="margin-top: 30px">
@@ -49,8 +62,9 @@
 					<TableBodyCell>{ file.athlete }</TableBodyCell>
 					<TableBodyCell>{ file.csv }</TableBodyCell>
 					<TableBodyCell>
-					<!--form, method post, delete file-->
-					<Button color="red" type="submit">Delete</Button>
+					<form on:submit|preventDefault={() => handleSubmit(file.id)}>
+						<Button color="red" type="submit">Delete</Button>
+					</form>
 					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
