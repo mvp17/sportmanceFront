@@ -7,11 +7,11 @@
     import axios from 'axios';
     import { baseURL } from '../../environment';
     
-    let /** @type {string} */ fileValue = "";
+    let /** @type {FileList} */ files;
     let /** @type {number} */ frequency;
     let /** @type {string} */ title;
     let /** @type {string} */ athlete;
-    let /** @type {boolean} */ isEventsFile = false;
+    let /** @type {boolean} */ isEventsFile;
 
     let frequencies = [
         { value: 1, name: '1 Hz' },
@@ -26,8 +26,13 @@
 		try {
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
-			const data = {title: title, athlete: athlete, csv: fileValue, is_event_file: isEventsFile, frequency: frequency};
-			const res = await instance.post('/register-data-input', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+            const formData = new FormData();
+            formData.append('csv', files[0]);
+            formData.append('title', title);
+            formData.append('athlete', athlete);
+            formData.append('is_event_file', isEventsFile.toString());
+            formData.append('frequency', frequency.toString());
+			const res = await instance.post('/register-data-input', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
 			console.log(res.data)
 		} catch (err) {
 			console.log(err);
@@ -35,33 +40,33 @@
 	}
 </script>
 
-    <!--form upload file-->
-    <Card>
-        <form on:submit|preventDefault={handleSubmit}>
-            <div class="mb-6">
-                <Label for="title" class="mb-2">Title</Label>
-                <Input type="text" id="title" placeholder="" bind:value={title} required />
-            </div>
-            <div class="mb-6">
-                <Label for="athlete" class="mb-2">Athlete</Label>
-                <Input type="text" id="athlete" placeholder="" bind:value={athlete} required />
-            </div>
-            <div class="mb-6">
-                <Label>
-                    Frequency
-                    <Select class="mt-2" items={frequencies} bind:value={frequency} />
-                </Label>
-            </div>
-            <div class="mb-6">
-                <Label class="space-y-2 mb-2">
-                    <span>Upload CSV file</span>
-                    <Fileupload bind:fileValue />
-                </Label>
-                <Label>File: {fileValue}</Label>
-            </div>
-            <div class="mb-6">
-                <Checkbox checked={isEventsFile}>Is events file?</Checkbox>
-            </div>
-            <Button type="submit">Submit</Button>
-        </form>
-    </Card>
+<Card>
+    <form on:submit|preventDefault={handleSubmit}>
+        <div class="mb-6">
+            <Label for="title" class="mb-2">Title</Label>
+            <Input type="text" id="title" placeholder="" bind:value={title} required />
+        </div>
+        <div class="mb-6">
+            <Label for="athlete" class="mb-2">Athlete</Label>
+            <Input type="text" id="athlete" placeholder="" bind:value={athlete} required />
+        </div>
+        <div class="mb-6">
+            <Label class="space-y-2 mb-2">
+                <span>Upload CSV file</span>
+                <Fileupload bind:files />
+            </Label>
+        </div>
+        <div class="mb-6">
+            <Checkbox bind:checked={isEventsFile}>Is events file?</Checkbox>
+        </div>
+        {#if !isEventsFile}
+        <div class="mb-6">
+            <Label>
+                Frequency
+                <Select class="mt-2" items={frequencies} bind:value={frequency} />
+            </Label>
+        </div>
+        {/if}
+        <Button type="submit">Submit</Button>
+    </form>
+</Card>

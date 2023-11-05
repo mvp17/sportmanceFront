@@ -9,6 +9,8 @@
     import { baseURL } from '../../environment';
 
     let /** @type {string[]} */ perfVars = [];
+    let /** @type {string} */ resPerfVars0;
+    let /** @type {string} */ resPerfVars1;
     let /** @type {string} */ timeName;
 
     onMount(async () => {
@@ -16,7 +18,9 @@
             axios.defaults.withCredentials = true;
             const instance = axios.create({ baseURL: baseURL });
             const res = await instance.get('/get-perform-vars-devices-file');
-            console.log(res.data)
+            resPerfVars0 = res.data.performance_vars[0];
+            resPerfVars1 = res.data.performance_vars[1];
+            perfVars = (resPerfVars0 + resPerfVars1).split(';');
         } catch (err) {
             console.log(err);
         }

@@ -6,7 +6,7 @@
 	import { Card, Input, Label, Button, Select } from 'flowbite-svelte';
 	import axios from 'axios';
 	import { baseURL } from '../../environment';
-    import { jwt } from '../../stores/sessionStore';
+    import { onMount } from 'svelte';
 
 	let initTimeBack = 0;
 	let finTimeBack = 1;
@@ -21,6 +21,17 @@
 			{ value: 100, name: '100 Hz' },
 			{ value: 1000, name: '1000 Hz' }
 	];
+
+	onMount(async () => {
+        try {
+			axios.defaults.withCredentials = true;
+			const instance = axios.create({ baseURL: baseURL });
+			const res = await instance.get('/get-init-time_fin-time');
+			console.log(res.data)
+		} catch (err) {
+			console.log(err);
+		}
+    });
 
 	async function handleSubmit () {
 		try {

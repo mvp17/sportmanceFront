@@ -6,13 +6,42 @@
 <script>
 	import welcome from '$lib/images/svelte-welcome.webp';
 	import welcome_fallback from '$lib/images/svelte-welcome.png';
-	let isThereConfig = 1;
-	let isThereKeyWordsEvents = 1;
-	let isThereChartPerfVars = 0;
-	let isThereKeyWordsDevices = 1;
-	let initTime = 0.0;
-	let finTime = 10;
-	let frequency = 14;
+    import { onMount } from 'svelte';
+    import axios from 'axios';
+    import { baseURL } from '../environment';
+	
+	let /** @type {string} */ chartPerfVars;
+	let /** @type {string} */ durationTimeMsNameEvents;
+	let /** @type {number} */ finTime;
+	let /** @type {number} */ frequency;
+	let /** @type {number} */ initTime;
+	let /** @type {number} */ isThereChartPerfVars;
+	let /** @type {number} */ isThereKeyWordsDevices;
+	let /** @type {number} */ isThereKeyWordsEvents;
+	let /** @type {number} */ isThereConfig;
+	let /** @type {string} */ timeMsNameEvents;
+	let /** @type {string} */ timeNameDevices;
+
+	onMount(async () => {
+        try {
+			axios.defaults.withCredentials = true;
+			const instance = axios.create({ baseURL: baseURL });
+			const res = await instance.get('/get-session-data');
+			initTime = res.data.init_time;
+			finTime = res.data.fin_time;
+			isThereConfig = res.data.is_there_settings;
+			isThereKeyWordsEvents = res.data.is_there_key_words_events;
+			isThereChartPerfVars = res.data.is_there_chart_perf_vars;
+			isThereKeyWordsDevices = res.data.is_there_key_words_devices;
+			frequency = res.data.frequency;
+			chartPerfVars = res.data.chart_perf_vars;
+			durationTimeMsNameEvents = res.data.duration_time_ms_name_events;
+			timeMsNameEvents = res.data.time_ms_name_events;
+			timeNameDevices = res.data.time_name_devices;
+		} catch (err) {
+			console.log(err);
+		}
+    });
 </script>
 
 <section>
@@ -43,11 +72,11 @@
 		<h2> There are key words for events file registered. Please if they are not for your analysis 
 			session go to the file list section and change them.
 		</h2>
-		<h2> The key word time name is: time_ms_name_events </h2>
-		<h2> The key word duration time name is: duration_time_ms_name_events </h2>
+		<h2> The key word time name is: {timeMsNameEvents} </h2>
+		<h2> The key word duration time name is: {durationTimeMsNameEvents} </h2>
 		
 		{#if isThereChartPerfVars === 0}
-			<h2> The variables for chart data are: chart_perf_vars </h2>
+			<h2> The variables for chart data are: {chartPerfVars} </h2>
 		{:else}
 			<h2> There are no variables for chart data registered. Please if you want to visualize data in chart, 
 				set the variables in the key words for events file section.
@@ -59,7 +88,7 @@
 	{#if isThereKeyWordsDevices === 1}
 		<h2> There are key words for devices file/s registered. Please if they are not for your analysis session 
 			go to the file list section and change them.</h2>
-		<h2> The key word time name is: time_name_devices </h2>
+		<h2> The key word time name is: {timeNameDevices} </h2>
 	{/if}
 </section>
 
