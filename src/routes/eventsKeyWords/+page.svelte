@@ -7,37 +7,37 @@
     import { onMount } from 'svelte';
     import axios from 'axios';
     import { baseURL } from '../../environment';
+    import { goto } from '$app/navigation';
 
-    let /** @type {string} */ resPerfVars;
     let /** @type {string[]} */ perfVars = [];
     let /** @type {string} */ timeName; 
     let /** @type {string} */ durationTimeName; 
     let /** @type {string} */ perfVarsString;
 
-    onMount(async () => {
+    onMount (async () => {
         try {
             axios.defaults.withCredentials = true;
             const instance = axios.create({ baseURL: baseURL });
             const res = await instance.get('/get-perform-vars-events-file');
-            resPerfVars = res.data.performance_vars[0];
-            perfVars = resPerfVars.split(';');
+            perfVars = res.data.performance_vars;
 		} catch (err) {
 			console.log(err);
 		}
     });
 
-    async function handleSubmit () {
+    async function registerEventsKeywords () {
 		try {
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
 			const data = {time_ms_name: timeName, duration_time_ms_name: durationTimeName, chart_perf_vars: perfVarsString };
-			const res = await instance.post('/register-events-keywords', data);
-			console.log(res.data)
+            await instance.post('/register-events-keywords', data);
+            goto('/dataInput');
 		} catch (err) {
 			console.log(err);
 		}
 	}
 </script>
+
 
 <h5 class="alert alert-primary" style="width: 475px; margin: 15px">
     The column names for this EVENTS file are: </h5>
@@ -45,7 +45,7 @@
     <p style="margin-bottom: 3px"> {perfVar} </p>
 {/each}
 <Card size="lg">
-    <form on:submit|preventDefault={handleSubmit}>
+    <form on:submit|preventDefault={registerEventsKeywords}>
         <div class="grid gap-8 mb-8 md:grid-cols-2">
             <div>
                 <Label for="time_ms_name" class="mb-2">Column name of time in ms</Label>

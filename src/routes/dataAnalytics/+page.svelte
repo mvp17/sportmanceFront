@@ -12,7 +12,7 @@
   let /** @type { string[][][] } */ dictCSVFiles = [];
   let /** @type { string[] } */ perfVarsList = [];
 
-  onMount(async () => {
+  onMount (async () => {
     try {
         axios.defaults.withCredentials = true;
         const instance = axios.create({ baseURL: baseURL });

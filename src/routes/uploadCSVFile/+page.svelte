@@ -6,9 +6,7 @@
     import { Fileupload, Card, Label, Input, Button, Select, Checkbox } from 'flowbite-svelte';
     import axios from 'axios';
     import { baseURL } from '../../environment';
-    import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { jwt } from '../../stores/sessionStore';
     
     let /** @type {FileList} */ files;
     let /** @type {number} */ frequency;
@@ -24,14 +22,8 @@
         { value: 100, name: '100 Hz' },
         { value: 1000, name: '1000 Hz' }
     ];
-
-    onMount(() => {
-        if (!$jwt) {
-            goto('/signin');
-        }
-    });
     
-    async function handleSubmit () {
+    async function registerDataInput () {
 		try {
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
@@ -41,8 +33,8 @@
             formData.append('athlete', athlete);
             formData.append('is_event_file', isEventsFile.toString());
             formData.append('frequency', frequency.toString());
-			const res = await instance.post('/register-data-input', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-			console.log(res.data)
+			await instance.post('/register-data-input', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            goto('/dataInput');
 		} catch (err) {
 			console.log(err);
 		}
@@ -50,7 +42,7 @@
 </script>
 
 <Card>
-    <form on:submit|preventDefault={handleSubmit}>
+    <form on:submit|preventDefault={registerDataInput}>
         <div class="mb-6">
             <Label for="title" class="mb-2">Title</Label>
             <Input type="text" id="title" placeholder="" bind:value={title} required />

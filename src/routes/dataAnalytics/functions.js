@@ -12,6 +12,7 @@ export function getSelectorChecks(/** @type { string[][][] } */ dictCSVFiles) {
 	processChecksWithDataToDisplay(str, dictCSVFiles);
 }
 
+
 function processChecksWithDataToDisplay(/** @type { string[] } */ str, /** @type { string[][][] } */ dictCSVFiles) {
 	let list_json = dictCSVFiles;
 	let /** @type { string[] } */ keys = [];
@@ -29,6 +30,7 @@ function processChecksWithDataToDisplay(/** @type { string[] } */ str, /** @type
 	}
 	generateDataTable(keys, values);
 }
+
 
 function generateDataTable(/** @type { string[] } */ columnNames, /** @type { string[][] } */ columnValues) {
 	let body = document.body,
@@ -60,6 +62,7 @@ function generateDataTable(/** @type { string[] } */ columnNames, /** @type { st
 	body.appendChild(tbl);
 }
 
+
 export function exportTableToCSV(/** @type { string } */ filename) {
 	let /** @type { string[] } */ csv = [];
 	let rows = document.querySelectorAll('table tr');
@@ -76,6 +79,7 @@ export function exportTableToCSV(/** @type { string } */ filename) {
 	// Download CSV
 	downloadCSV(csv.join('\n'), filename);
 }
+
 
 function downloadCSV(/** @type { string } */ csv, /** @type { string } */ filename) {
 	let csvFile;

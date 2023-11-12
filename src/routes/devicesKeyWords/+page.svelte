@@ -7,32 +7,29 @@
     import { onMount } from 'svelte';
     import axios from 'axios';
     import { baseURL } from '../../environment';
+    import { goto } from '$app/navigation';
 
     let /** @type {string[]} */ perfVars = [];
-    let /** @type {string} */ resPerfVars0;
-    let /** @type {string} */ resPerfVars1;
     let /** @type {string} */ timeName;
 
-    onMount(async () => {
+    onMount (async () => {
         try {
             axios.defaults.withCredentials = true;
             const instance = axios.create({ baseURL: baseURL });
             const res = await instance.get('/get-perform-vars-devices-file');
-            resPerfVars0 = res.data.performance_vars[0];
-            resPerfVars1 = res.data.performance_vars[1];
-            perfVars = (resPerfVars0 + resPerfVars1).split(';');
+            perfVars = res.data.performance_vars;
         } catch (err) {
             console.log(err);
         }
     });
 
-    async function handleSubmit () {
+    async function registerDevicesKeywords () {
 		try {
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
 			const data = {time_name: timeName };
-			const res = await instance.post('/register-devices-keywords', data);
-			console.log(res.data)
+			await instance.post('/register-devices-keywords', data);
+            goto('/dataInput');
 		} catch (err) {
 			console.log(err);
 		}
@@ -49,7 +46,7 @@
     </div>
     <div class="column">
         <Card>
-            <form on:submit|preventDefault={handleSubmit}>
+            <form on:submit|preventDefault={registerDevicesKeywords}>
                 <div class="mb-6">
                     <Label for="time_name" class="mb-2">Column name of Time of DEVICES files</Label>
                     <Input type="text" id="time_name" placeholder="Time" bind:value={timeName} required />

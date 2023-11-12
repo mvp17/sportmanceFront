@@ -10,24 +10,22 @@
 	
 	let /** @type {{ id: number, title: string, athlete: string, csv: string }[] } */ files = [];
 
-	onMount(async () => {
+	onMount (async () => {
         try {
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
 			const res = await instance.get('/get-all-files');
-			console.log(res.data)
 			files = res.data
 		} catch (err) {
 			console.log(err);
 		}
     });
 
-	async function handleSubmit (/** @type {number} */ id) {
+	async function deleteFile (/** @type {number} */ id) {
 		try {
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
 			let res = await instance.post(`/delete-data-input/${id}`);
-			console.log(res.data)
 			res = await instance.get('/get-all-files');
 			files = res.data
 		} catch (err) {
@@ -62,7 +60,7 @@
 					<TableBodyCell>{ file.athlete }</TableBodyCell>
 					<TableBodyCell>{ file.csv }</TableBodyCell>
 					<TableBodyCell>
-					<form on:submit|preventDefault={() => handleSubmit(file.id)}>
+					<form on:submit|preventDefault={() => deleteFile(file.id)}>
 						<Button color="red" type="submit">Delete</Button>
 					</form>
 					</TableBodyCell>
