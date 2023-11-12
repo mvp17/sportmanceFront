@@ -6,6 +6,9 @@
     import { Fileupload, Card, Label, Input, Button, Select, Checkbox } from 'flowbite-svelte';
     import axios from 'axios';
     import { baseURL } from '../../environment';
+    import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
+    import { jwt } from '../../stores/sessionStore';
     
     let /** @type {FileList} */ files;
     let /** @type {number} */ frequency;
@@ -22,6 +25,12 @@
         { value: 1000, name: '1000 Hz' }
     ];
 
+    onMount(() => {
+        if (!$jwt) {
+            goto('/signin');
+        }
+    });
+    
     async function handleSubmit () {
 		try {
 			axios.defaults.withCredentials = true;

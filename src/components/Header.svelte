@@ -1,56 +1,64 @@
 <script>
 	import { page } from '$app/stores';
+    import AuthGuard from '../routes/signin/AuthGuard.svelte';
 </script>
 
 <header>
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/settings' ? 'page' : undefined}>
-				<a href="/settings">Settings</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
-				<a href="/dashboard">Dashboard</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/dataAnalytics' ? 'page' : undefined}>
-				<a href="/dataAnalytics">Data Analytics</a>
-			</li>
-      <li aria-current={$page.url.pathname === '/dataInput' ? 'page' : undefined}>
-				<a href="/dataInput">Data Input</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/account' ? 'page' : undefined}>
-				<a href="/account">Account</a>
-			</li>
-			
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
-  <nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-      <li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
-				<a href="/signup">Sign up</a>
-			</li>
-      <li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
-				<a href="/signin">Sign in</a>
-			</li>
-      <li aria-current={$page.url.pathname === '/signout' ? 'page' : undefined}>
-				<a href="/signout">Sign out</a>
-			</li>
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
+	<AuthGuard>
+		<span slot="authed"> 
+			<nav>
+				<svg viewBox="0 0 2 3" aria-hidden="true">
+					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
+				</svg>
+				<ul>
+					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+						<a href="/">Home</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/settings' ? 'page' : undefined}>
+						<a href="/settings">Settings</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
+						<a href="/dashboard">Dashboard</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/dataAnalytics' ? 'page' : undefined}>
+						<a href="/dataAnalytics">Data Analytics</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/dataInput' ? 'page' : undefined}>
+						<a href="/dataInput">Data Input</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/account' ? 'page' : undefined}>
+						<a href="/account">Account</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/signout' ? 'page' : undefined}>
+						<a href="/signout">Sign out</a>
+					</li>
+				</ul>
+				<svg viewBox="0 0 2 3" aria-hidden="true">
+					<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
+				</svg>
+			</nav>
+		</span>
+	</AuthGuard>
+	<AuthGuard>
+		<span slot="not_authed">
+			<nav>
+				<svg viewBox="0 0 2 3" aria-hidden="true">
+					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
+				</svg>
+				<ul>
+					<li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
+						<a href="/signup">Sign up</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
+						<a href="/signin">Sign in</a>
+					</li>
+				</ul>			
+				<svg viewBox="0 0 2 3" aria-hidden="true">
+					<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
+				</svg>
+			</nav>
+		</span>
+	</AuthGuard>
 </header>
 
 <style>

@@ -8,8 +8,8 @@
 	import { baseURL } from '../../environment';
     import { onMount } from 'svelte';
 
-	let initTimeBack = 0;
-	let finTimeBack = 1;
+	let /** @type {string} */ initTimeBack = "";
+	let /** @type {string} */ finTimeBack = "";
 	let /** @type {number} */ initTime;
 	let /** @type {number} */ finTime;
 	let /** @type {number} */ frequency;
@@ -27,6 +27,8 @@
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
 			const res = await instance.get('/get-init-time_fin-time');
+			initTimeBack = res.data.initTime.toString();
+			finTimeBack = res.data.finTime.toString();
 			console.log(res.data)
 		} catch (err) {
 			console.log(err);

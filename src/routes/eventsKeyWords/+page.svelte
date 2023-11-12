@@ -16,9 +16,9 @@
 
     onMount(async () => {
         try {
-			axios.defaults.withCredentials = true;
-			const instance = axios.create({ baseURL: baseURL });
-			const res = await instance.get('/get-perform-vars-events-file');
+            axios.defaults.withCredentials = true;
+            const instance = axios.create({ baseURL: baseURL });
+            const res = await instance.get('/get-perform-vars-events-file');
             resPerfVars = res.data.performance_vars[0];
             perfVars = resPerfVars.split(';');
 		} catch (err) {
