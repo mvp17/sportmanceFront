@@ -32,6 +32,8 @@
 	"type": "module",
 	"dependencies": {
 		"axios": "^1.5.1",
-		"flowbite-svelte-icons": "^0.4.4"
+		"chart.js": "^4.4.0",
+		"flowbite-svelte-icons": "^0.4.4",
+		"svelte-chartjs": "^3.1.2"
 	}
 }
