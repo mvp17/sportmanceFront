@@ -36,23 +36,21 @@
 	}
 </script>
 
-<div class='row'>
-    <div class="column">
-        <h5 class="alert alert-primary" style="width: 475px; margin: 15px">
-            The column names for this devices file are: </h5>
-        {#each perfVars as perfVar}
-            <p style="margin-bottom: 3px"> {perfVar} </p>
-        {/each}
-    </div>
-    <div class="column">
-        <Card>
-            <form on:submit|preventDefault={registerDevicesKeywords}>
-                <div class="mb-6">
-                    <Label for="time_name" class="mb-2">Column name of Time of DEVICES files</Label>
-                    <Input type="text" id="time_name" placeholder="Time" bind:value={timeName} required />
-                </div>
-                <Button type="submit">Submit</Button>
-            </form>
-        </Card>
-    </div>
+
+<h5 class="alert alert-primary" style="width: 475px; margin: 15px">
+    The column names for this devices file are: 
+</h5>
+<div class="grid gap-3 md:grid-cols-3 rounded-lg border border-gray-200">
+    {#each perfVars as perfVar}
+        <p style="margin-bottom: 3px"> {perfVar} </p>
+    {/each}
 </div>
+<Card style="margin-top:10px">
+    <form on:submit|preventDefault={registerDevicesKeywords}>
+        <div class="mb-6">
+            <Label for="time_name" class="mb-2">Column name of Time of DEVICES files</Label>
+            <Input type="text" id="time_name" placeholder="Time" bind:value={timeName} required />
+        </div>
+        <Button type="submit">Submit</Button>
+    </form>
+</Card>

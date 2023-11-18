@@ -17,7 +17,6 @@
 			const res = await axios.post(baseURL + '/login', { email: email, password: password });
       jwt.set(res.data.jwt);
       document.cookie = `jwt=${$jwt}`;
-      console.log($jwt);
       goto('/')
 		} catch (err) {
 			console.log(err);

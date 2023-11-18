@@ -14,14 +14,13 @@
   import { baseURL } from '../../environment.js';
   
   // Retrieve backend raw data
-  let /** @type { {maker: string, type: string, make: number}[] } */ items = [
-    { maker: 'Toyota', type: 'ABC', make: 2017 },
-    { maker: 'Ford', type: 'CDE', make: 2018 },
-    { maker: 'Volvo', type: 'FGH', make: 2019 },
-    { maker: 'Saab', type: 'IJK', make: 2020 }
-  ];
-  let /** @type { string[][][] } */ dictCSVFiles = [];
-  let /** @type { string[] } */ perfVarsList = Object.keys(items[0]);
+  /**
+     * @type {any[]}
+     */
+  let items = [];
+  let dictCSVFiles = [];
+  // @ts-ignore
+  let /** @type { string[] } */ perfVarsList = [];
   let /** @type { string[] } */ group = [];
   let renderTable = false;
 
@@ -29,7 +28,6 @@
     items.map((item) => {
       Object.keys(item).map((key) => {
         if (!group.includes(key)) {
-          // @ts-ignore
           delete item[key];
         }
       });
@@ -41,15 +39,9 @@
     group = [];
     renderTable = false;
     // Retrieve backend raw data
-    items = [
-      { maker: 'Toyota', type: 'ABC', make: 2017 },
-      { maker: 'Ford', type: 'CDE', make: 2018 },
-      { maker: 'Volvo', type: 'FGH', make: 2019 },
-      { maker: 'Saab', type: 'IJK', make: 2020 }
-    ];
   }
 
-  function exportToCsv () {
+  function exportCsv () {
     let csv = "";
     // Loop the array of objects
     for (let row = 0; row < items.length; row++) {
@@ -65,8 +57,8 @@
           csv += key + (keysCounter+1 < keysAmount ? ',' : '\r\n' );
           keysCounter++;
         }
-      }else{
-        for(let key in items[row]){
+      } else {
+        for (let key in items[row]) {
           // @ts-ignore
           csv += items[row][key] + (keysCounter+1 < keysAmount ? ',' : '\r\n' );
           keysCounter++;
@@ -84,14 +76,28 @@
     document.querySelector('#download-csv').click();
   }
 
+  function checkAll () {
+    group = perfVarsList;
+  }
+
   onMount (async () => {
     try {
         axios.defaults.withCredentials = true;
         const instance = axios.create({ baseURL: baseURL });
         const res = await instance.get('/get-analyzable-data');
-        console.log(res.data);
-        //dictCSVFiles = res.data.dict_csv_files;
-        //perfVarsList = res.data.perf_vars
+        dictCSVFiles = res.data.dict_csv_files;
+        perfVarsList = res.data.perf_vars
+
+        // @ts-ignore
+        let filesdata = dictCSVFiles.reduce((r, c) => Object.assign(r, c), {});
+        for (let value = 0; value < Object.values(filesdata)[0].length; value++) {
+          let item = {};
+          for (let key = 0; key < Object.keys(filesdata).length; key++) {
+            // @ts-ignore
+            item[Object.keys(filesdata)[key]] = Object.values(filesdata)[key][value];
+          }
+          items.push(item);
+        }
     } catch (err) {
       console.log(err);
     }
@@ -99,25 +105,30 @@
 </script>
 
 <!--Check vars to display in table-->
-<Card>
-  <ul class="items-center w-full rounded-lg border border-gray-200 sm:flex dark:bg-gray-800 dark:border-gray-600 divide-x divide-gray-200 dark:divide-gray-600">
-    {#each perfVarsList as perfVar}
-      <li class="w-full">
-        <Checkbox bind:group value={perfVar}> {perfVar} </Checkbox>
-      </li>
-    {/each}
-  </ul>
-  {#if group.length !== 0}
-    <Button on:click={getChecks}>Save</Button>
+<Card size="xl">
+  {#if perfVarsList.length !== 0}
+    <div class="grid gap-3 md:grid-cols-4" style="margin-bottom:5px">
+      <Button color="alternative" on:click={checkAll}>Check all</Button>
+      <Button color="red" on:click={reset}>Reset</Button>
+    </div>
   {/if}
-  {#if renderTable}
-    <Button color="yellow" on:click={reset}>Reset</Button>
-    <Button color="green" on:click={exportToCsv}>Export</Button>
+  <div class="grid gap-3 md:grid-cols-3 rounded-lg border border-gray-200">
+		{#each perfVarsList as perfVar}
+			<Checkbox bind:group value={perfVar}> {perfVar} </Checkbox>
+		{/each}
+  </div>
+  {#if group.length !== 0}
+  <div class="grid gap-3 md:grid-cols-4" style="margin-top:10px">  
+    <Button on:click={getChecks}>Save</Button>
+    {#if renderTable}
+      <Button color="green" on:click={exportCsv}>Export</Button>
+    {/if}
+  </div>
   {/if}
 </Card>
 
 <!--Data table-->
-<Table color="green" striped={true} hoverable={true} shadow>
+<Table color="green" striped={true} hoverable={true} shadow style="margin-top:10px">
   <TableHead>
     {#if renderTable}
       {#each Object.keys(items[0]) as item}
