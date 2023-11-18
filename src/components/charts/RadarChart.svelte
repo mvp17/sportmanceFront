@@ -1,25 +1,41 @@
 <script>
+  /**
+    * @type {any}
+  */
+  export let input;
+  /**
+    * @type {number}
+  */
+  export let dataPos;
+
   import { Radar } from 'svelte-chartjs';
-  import { data } from '../../mocks/radarData';
+  import { Chart as ChartJS, Title, Tooltip, Legend, PointElement, RadialLinearScale, LineElement } from 'chart.js';
+  import { onMount } from 'svelte';
+  import { getColors } from '../../functions/getColors';
 
-  import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    PointElement,
-    RadialLinearScale,
-    LineElement,
-  } from 'chart.js';
+  ChartJS.register(Title, Tooltip, Legend, PointElement, RadialLinearScale, LineElement);
 
-  ChartJS.register(
-    Title,
-    Tooltip,
-    Legend,
-    PointElement,
-    RadialLinearScale,
-    LineElement
-  );
+  /**
+    * @type {{labels: string[], datasets: any[]}}
+  */
+  let data;
+
+  onMount(() => {
+    const labels = input.labels[dataPos]
+    data = {
+      labels: labels,
+      datasets: [
+        {
+          label: input.chartVars[dataPos],
+          data: input.dataSource[dataPos],
+          backgroundColor: getColors(labels),
+          borderColor: getColors(labels),
+        },
+      ],
+    };
+  });
 </script>
 
-<Radar {data} options={{ responsive: true }} />
+{#if data}
+  <Radar {data} options={{ responsive: true }} />
+{/if}

@@ -54,13 +54,13 @@
         for (let key in items[row]) {
           // This is to not add a comma at the last cell
           // The '\r\n' adds a new line
-          csv += key + (keysCounter+1 < keysAmount ? ',' : '\r\n' );
+          csv += key + (keysCounter+1 < keysAmount ? ';' : '\r\n' );
           keysCounter++;
         }
       } else {
         for (let key in items[row]) {
           // @ts-ignore
-          csv += items[row][key] + (keysCounter+1 < keysAmount ? ',' : '\r\n' );
+          csv += items[row][key] + (keysCounter+1 < keysAmount ? ';' : '\r\n' );
           keysCounter++;
         }
       }

@@ -13,9 +13,11 @@
   import RadarChart from '../../components/charts/RadarChart.svelte';
 
   let /** @type { string[] } */ chartVars = [];
-  let /** @type { string[] } */ dataSource = [];
-  let /** @type { string[] } */ labels = [];
   let chart = 'bar';
+  /**
+    * @type {{chartVars: string[], dataSource: number[][], labels: string[][]}}
+  */
+  let input = { chartVars: [], dataSource: [], labels: [] };
   
   onMount(async () => {
     try {
@@ -23,9 +25,7 @@
       const instance = axios.create({ baseURL: baseURL });
       const res = await instance.get('/get-chart-data');
       chartVars = res.data.chartVars;
-      dataSource = res.data.datasource;
-      labels = res.data.labels;
-      console.log(res.data);
+      input = { chartVars: chartVars, dataSource: res.data.datasource, labels: res.data.labels }
     } catch (err) {
       console.log(err);
     }
@@ -40,12 +40,15 @@
       <li class="w-full"><Radio bind:group={chart} value="pol" name="hor-list" class="p-3">Polar Area</Radio></li>
   </ul>
 </Card>
-{#if chart == 'bar'}
-  <BarChart />
-{:else if chart == 'rad'}
-  <RadarChart />
-{:else if chart == 'pie'}
-  <PieChart />
-{:else if chart == 'pol'}
-  <PolarAreaChart />
-{/if}
+{#each chartVars as chartVar, i}
+  <h5 style="margin-top:10px">{chartVar}</h5>
+  {#if chart == 'bar'}
+    <BarChart input={input} dataPos={i}/>
+  {:else if chart == 'rad'}
+    <RadarChart input={input} dataPos={i}/>
+  {:else if chart == 'pie'}
+    <PieChart input={input} dataPos={i}/>
+  {:else if chart == 'pol'}
+    <PolarAreaChart input={input} dataPos={i}/>
+  {/if}
+{/each}

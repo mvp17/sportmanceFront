@@ -1,25 +1,40 @@
 <script>
+  /**
+    * @type {{chartVars: string[], dataSource: number[][], labels: string[][]}}
+  */
+  export let input;
+  /**
+    * @type {number}
+  */
+  export let dataPos;
+
   import { Bar } from 'svelte-chartjs';
-  import { data } from '../../mocks/data';
+  import { Chart, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+  import { onMount } from 'svelte';
+  import { getColors } from '../../functions/getColors';
 
-  import {
-    Chart,
-    Title,
-    Tooltip,
-    Legend,
-    BarElement,
-    CategoryScale,
-    LinearScale,
-  } from 'chart.js';
+  Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+  /**
+    * @type {{labels: string[], datasets: any[]}}
+  */
+  let data;
 
-  Chart.register(
-    Title,
-    Tooltip,
-    Legend,
-    BarElement,
-    CategoryScale,
-    LinearScale
-  );
+  onMount(() => {
+    const labels = input.labels[dataPos]
+    data = {
+      labels: labels,
+      datasets: [
+        {
+          label: input.chartVars[dataPos],
+          data: input.dataSource[dataPos],
+          backgroundColor: getColors(labels),
+          borderColor: getColors(labels),
+        },
+      ],
+    };
+  });
 </script>
 
-<Bar {data} options={{ responsive: true }} />
+{#if data}
+  <Bar {data} options={{ responsive: true }} />
+{/if}
