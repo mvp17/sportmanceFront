@@ -1,7 +1,7 @@
 <script>
 	import '../app.postcss';
 	import Header from '../components/Header.svelte';
-	import './styles.scss';
+	import './styles.css';
 </script>
 
 <div class="app">
