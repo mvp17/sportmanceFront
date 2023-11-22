@@ -2,10 +2,12 @@
 	import '../app.postcss';
 	import Header from '../components/Header.svelte';
 	import './styles.css';
+	import { Toaster } from 'svelte-sonner';
 </script>
 
 <div class="app">
 	<Header />
+	<Toaster position="top-right" duration={5000}/>
 	<main>
 		<slot />
 	</main>

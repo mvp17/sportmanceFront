@@ -8,6 +8,7 @@
     import axios from 'axios';
     import { baseURL } from '../../environment';
     import { goto } from '$app/navigation';
+    import { toast } from 'svelte-sonner';
 
     let /** @type {string[]} */ perfVars = [];
     let /** @type {string} */ timeName;
@@ -29,6 +30,7 @@
 			const instance = axios.create({ baseURL: baseURL });
 			const data = {time_name: timeName };
 			await instance.post('/register-devices-keywords', data);
+            toast.success('Devices keywords registered successfully!', { style: 'background: LightGreen; border-color: LightGreen;' });
             goto('/dataInput');
 		} catch (err) {
 			console.log(err);

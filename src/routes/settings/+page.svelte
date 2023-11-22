@@ -8,6 +8,7 @@
 	import { baseURL } from '../../environment';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
+    import { toast } from 'svelte-sonner';
 
 	let /** @type {string} */ initTimeBack = "";
 	let /** @type {string} */ finTimeBack = "";
@@ -41,6 +42,7 @@
 			const instance = axios.create({ baseURL: baseURL });
 			const data = { init_time_ms: initTime, fin_time_ms: finTime, frequency: frequency };
 			await instance.post('/register-settings', data);
+			toast.success('Settings registered successfully!', { style: 'background: LightGreen; border-color: LightGreen;' });
 			goto('/');
 		} catch (err) {
 			console.log(err);

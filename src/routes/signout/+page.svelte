@@ -9,6 +9,7 @@
   import { baseURL } from '../../environment';
   import { jwt } from '../../stores/sessionStore';
   import { goto } from '$app/navigation';
+  import { toast } from 'svelte-sonner';
 	
   let isThereConfiguration = 0;
 
@@ -27,7 +28,8 @@
     try {
       axios.defaults.withCredentials = true;
       const instance = axios.create({ baseURL: baseURL });
-      const res = await instance.post('/delete-session-data');
+      await instance.post('/delete-session-data');
+      toast.success('Sign out succeeded!', { style: 'background: LightGreen; border-color: LightGreen;' });
 		} catch (err) {
 			console.log(err);
 		}

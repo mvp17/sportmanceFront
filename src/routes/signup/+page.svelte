@@ -7,13 +7,14 @@
 	import axios from 'axios';
     import { goto } from '$app/navigation';
     import { baseURL } from '../../environment';
+	import { toast } from 'svelte-sonner';
 	
 	let /** @type {string} */username, /** @type {string} */ email, /** @type {string} */ password;
 	
 	async function signup () {
 		try {
 			const res = await axios.post(baseURL + '/register', { name: username, email: email, password: password });
-			console.log(res.data)
+			toast.success('Sign up succeeded!', { style: 'background: LightGreen; border-color: LightGreen;' });
 			goto('/signin');
 		} catch (err) {
 			console.log(err);

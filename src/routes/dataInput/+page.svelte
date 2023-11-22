@@ -7,6 +7,7 @@
 	import { Button, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
     import { onMount } from 'svelte';
     import { baseURL } from '../../environment';
+	import { toast } from 'svelte-sonner';
 	
 	let /** @type {{ id: number, title: string, athlete: string, csv: string }[] } */ files = [];
 
@@ -26,6 +27,7 @@
 			axios.defaults.withCredentials = true;
 			const instance = axios.create({ baseURL: baseURL });
 			let res = await instance.post(`/delete-data-input/${id}`);
+			toast.warning('File deleted!', { style: 'background: Red; border-color: Red;' });
 			res = await instance.get('/get-all-files');
 			files = res.data
 		} catch (err) {

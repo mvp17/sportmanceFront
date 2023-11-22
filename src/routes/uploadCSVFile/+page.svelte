@@ -7,6 +7,7 @@
     import axios from 'axios';
     import { baseURL } from '../../environment';
     import { goto } from '$app/navigation';
+    import { toast } from 'svelte-sonner';
     
     let /** @type {FileList} */ files;
     let /** @type {number} */ frequency;
@@ -34,6 +35,7 @@
             formData.append('is_event_file', isEventsFile.toString());
             formData.append('frequency', frequency.toString());
 			await instance.post('/register-data-input', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            toast.success('Data registered successfully!', { style: 'background: LightGreen; border-color: LightGreen;' });
             goto('/dataInput');
 		} catch (err) {
 			console.log(err);

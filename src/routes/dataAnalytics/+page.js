@@ -1,7 +1,8 @@
 import { dev } from '$app/environment';
 import { redirect } from '@sveltejs/kit';
-import { jwt } from '../../stores/sessionStore';
+import { dataInput, devicesKeywords, eventsKeywords, jwt, settings } from '../../stores/sessionStore';
 import { get } from 'svelte/store';
+import { toast } from 'svelte-sonner';
 
 // we don't need any JS on this page, though we'll load
 // it in dev so that we get hot module replacement
@@ -12,7 +13,22 @@ export const csr = dev;
 export const prerender = true;
 
 export function load() {
-    if (get(jwt) === '') {
-        throw redirect(307, '/signin');
+    if (get(jwt) === '') throw redirect(307, '/signin');
+    
+    if (get(dataInput) === '') {
+        toast.error('There is no data to analyse. Upload csv files', 
+                    { style: 'background: Red; border-color: Red;' }
+                   );
+        throw redirect(307, '/uploadCSVFile');
+    } else if (get(settings) === '') {
+        toast.error('There is no settings registered. ', 
+                    { style: 'background: Red; border-color: Red;' }
+                   );
+        throw redirect(307, '/settings');
+    } else if (get(devicesKeywords) === '' || get(eventsKeywords) === '') {
+        toast.error('There are no key words registered.', 
+                    { style: 'background: Red; border-color: Red;' }
+                   );
+        throw redirect(307, '/dataInput');
     }
 }
