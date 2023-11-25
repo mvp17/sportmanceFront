@@ -8,6 +8,7 @@
     import { baseURL } from '../../environment';
     import { goto } from '$app/navigation';
     import { toast } from 'svelte-sonner';
+    import { eventsFile, dataInput } from '../../stores/sessionStore';
     
     let /** @type {FileList} */ files;
     let /** @type {number} */ frequency;
@@ -36,6 +37,8 @@
             formData.append('frequency', frequency.toString());
 			await instance.post('/register-data-input', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             toast.success('Data registered successfully!', { style: 'background: LightGreen; border-color: LightGreen;' });
+            if (isEventsFile) eventsFile.set(1);
+            dataInput.set(1);
             goto('/dataInput');
 		} catch (err) {
 			console.log(err);

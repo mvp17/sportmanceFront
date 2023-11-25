@@ -15,17 +15,17 @@ export const prerender = true;
 export function load() {
     if (get(jwt) === '') throw redirect(307, '/signin');
     
-    if (get(dataInput) === '') {
+    if (get(dataInput) === 0) {
         toast.error('There is no data to analyse. Upload csv files', 
                     { style: 'background: Red; border-color: Red;' }
                    );
         throw redirect(307, '/uploadCSVFile');
-    } else if (get(settings) === '') {
+    } else if (get(settings) === 0) {
         toast.error('There is no settings registered. ', 
                     { style: 'background: Red; border-color: Red;' }
                    );
         throw redirect(307, '/settings');
-    } else if (get(devicesKeywords) === '' || get(eventsKeywords) === '') {
+    } else if (get(devicesKeywords) === 0 || get(eventsKeywords) === 0) {
         toast.error('There are no key words registered.', 
                     { style: 'background: Red; border-color: Red;' }
                    );

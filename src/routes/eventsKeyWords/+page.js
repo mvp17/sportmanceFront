@@ -15,13 +15,13 @@ export const prerender = true;
 export function load() {
     if (get(jwt) === '') throw redirect(307, '/signin');
 
-    if (get(dataInput) === '') {
+    if (get(dataInput) === 0) {
         toast.error('There is no data to analyse. Please upload some csv files ', 
                     { style: 'background: Red; border-color: Red;' }
                    );
         throw redirect(307, '/uploadCSVFile');
     }
-    else if (get(eventsFile) === '' && get(dataInput) !== '') {
+    else if (get(eventsFile) === 0 && get(dataInput) !== 0) {
         toast.error('There are not events files uploaded.', 
                     { style: 'background: Red; border-color: Red;' }
                    );

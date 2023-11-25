@@ -9,6 +9,7 @@
     import { baseURL } from '../../environment';
     import { goto } from '$app/navigation';
     import { toast } from 'svelte-sonner';
+    import { eventsKeywords } from '../../stores/sessionStore';
 
     let /** @type {string[]} */ perfVars = [];
     let /** @type {string} */ timeName; 
@@ -34,6 +35,7 @@
 			const data = { time_ms_name: timeName, duration_time_ms_name: durationTimeName, chart_perf_vars: chartPerfVars };
             await instance.post('/register-events-keywords', data);
             toast.success('Events keywords registered successfully!', { style: 'background: LightGreen; border-color: LightGreen;' });
+            eventsKeywords.set(1);
             goto('/dataInput');
 		} catch (err) {
 			console.log(err);

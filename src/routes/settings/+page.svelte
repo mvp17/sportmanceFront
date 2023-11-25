@@ -9,6 +9,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { toast } from 'svelte-sonner';
+	import { settings } from '../../stores/sessionStore';
 
 	let /** @type {string} */ initTimeBack = "";
 	let /** @type {string} */ finTimeBack = "";
@@ -43,6 +44,7 @@
 			const data = { init_time_ms: initTime, fin_time_ms: finTime, frequency: frequency };
 			await instance.post('/register-settings', data);
 			toast.success('Settings registered successfully!', { style: 'background: LightGreen; border-color: LightGreen;' });
+			settings.set(1);
 			goto('/');
 		} catch (err) {
 			console.log(err);

@@ -13,7 +13,6 @@
   import axios from 'axios';
   import { baseURL } from '../../environment.js';
   
-  // Retrieve backend raw data
   /**
      * @type {any[]}
      */
@@ -35,10 +34,11 @@
     renderTable = true;
   }
 
-  function reset () {
+  async function reset () {
     group = [];
     renderTable = false;
-    // Retrieve backend raw data
+    items = [];
+    await getItems();
   }
 
   function exportCsv () {
@@ -80,24 +80,28 @@
     group = perfVarsList;
   }
 
+  async function getItems() {
+    axios.defaults.withCredentials = true;
+    const instance = axios.create({ baseURL: baseURL });
+    const res = await instance.get('/get-analyzable-data');
+    dictCSVFiles = res.data.dict_csv_files;
+    perfVarsList = res.data.perf_vars
+
+    // @ts-ignore
+    let filesdata = dictCSVFiles.reduce((r, c) => Object.assign(r, c), {});
+    for (let value = 0; value < Object.values(filesdata)[0].length; value++) {
+      let item = {};
+      for (let key = 0; key < Object.keys(filesdata).length; key++) {
+        // @ts-ignore
+        item[Object.keys(filesdata)[key]] = Object.values(filesdata)[key][value];
+      }
+      items.push(item);
+    }
+  }
+
   onMount (async () => {
     try {
-        axios.defaults.withCredentials = true;
-        const instance = axios.create({ baseURL: baseURL });
-        const res = await instance.get('/get-analyzable-data');
-        dictCSVFiles = res.data.dict_csv_files;
-        perfVarsList = res.data.perf_vars
-
-        // @ts-ignore
-        let filesdata = dictCSVFiles.reduce((r, c) => Object.assign(r, c), {});
-        for (let value = 0; value < Object.values(filesdata)[0].length; value++) {
-          let item = {};
-          for (let key = 0; key < Object.keys(filesdata).length; key++) {
-            // @ts-ignore
-            item[Object.keys(filesdata)[key]] = Object.values(filesdata)[key][value];
-          }
-          items.push(item);
-        }
+      await getItems();
     } catch (err) {
       console.log(err);
     }

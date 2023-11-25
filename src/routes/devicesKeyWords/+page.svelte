@@ -9,6 +9,7 @@
     import { baseURL } from '../../environment';
     import { goto } from '$app/navigation';
     import { toast } from 'svelte-sonner';
+    import { devicesKeywords } from '../../stores/sessionStore';
 
     let /** @type {string[]} */ perfVars = [];
     let /** @type {string} */ timeName;
@@ -31,6 +32,7 @@
 			const data = {time_name: timeName };
 			await instance.post('/register-devices-keywords', data);
             toast.success('Devices keywords registered successfully!', { style: 'background: LightGreen; border-color: LightGreen;' });
+            devicesKeywords.set(1);
             goto('/dataInput');
 		} catch (err) {
 			console.log(err);

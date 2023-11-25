@@ -10,7 +10,7 @@
     import axios from 'axios';
     import { baseURL } from '../environment';
     import AuthGuard from './signin/AuthGuard.svelte';
-    import { jwt } from '../stores/sessionStore';
+    import { jwt, settings, eventsKeywords, eventsFile, devicesKeywords, dataInput } from '../stores/sessionStore';
 	
 	let /** @type {string} */ chartPerfVars;
 	let /** @type {string} */ durationTimeMsNameEvents;
@@ -33,9 +33,21 @@
 				initTime = res.data.init_time;
 				finTime = res.data.fin_time;
 				isThereConfig = res.data.is_there_settings;
+				if (isThereConfig === 1) settings.set(1);
+				
 				isThereKeyWordsEvents = res.data.is_there_key_words_events;
+				if (isThereKeyWordsEvents === 1) {
+					eventsKeywords.set(1);
+					eventsFile.set(1);
+					dataInput.set(1);
+				}
+
 				isThereChartPerfVars = res.data.is_there_chart_perf_vars;
 				isThereKeyWordsDevices = res.data.is_there_key_words_devices;
+				if (isThereKeyWordsDevices === 1) {
+					devicesKeywords.set(1);
+					dataInput.set(1);
+				}
 				frequency = res.data.frequency;
 				chartPerfVars = res.data.chart_perf_vars;
 				durationTimeMsNameEvents = res.data.duration_time_ms_name_events;

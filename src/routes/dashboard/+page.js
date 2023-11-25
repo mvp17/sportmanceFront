@@ -14,12 +14,12 @@ export const prerender = true;
 export function load() {
     if (get(jwt) === '') throw redirect(307, '/signin');
 
-    if (get(eventsFile) === '') {
+    if (get(eventsFile) === 0) {
         toast.error('There is no events file registered. Upload events file', 
                     { style: 'background: Red; border-color: Red;' }
                    );
         throw redirect(307, '/uploadCSVFile');
-    } else if (get(eventsKeywords) === '') {
+    } else if (get(eventsKeywords) === 0) {
         toast.error('There are no events key words registered.', 
                     { style: 'background: Red; border-color: Red;' }
                    );
